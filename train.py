@@ -6,8 +6,7 @@ import gymnasium as gym
 
 Q = {}
 actions = (0, 1, 2, 3)
-Params = TypedDict(
-    'Params', {'alpha': float, 'gamma': float, 'epsilon': float})
+Params = TypedDict("Params", {"alpha": float, "gamma": float, "epsilon": float})
 
 
 def qvalues(state):
@@ -15,7 +14,7 @@ def qvalues(state):
 
 
 def extract_obs(state):
-    return tuple(state['agent'].tolist()), tuple(state['target'].tolist())
+    return tuple(state["agent"].tolist()), tuple(state["target"].tolist())
 
 
 def probs(v, eps=1e-4):
@@ -36,7 +35,7 @@ def train(params: Params, env: gym.Env):
         cum_reward = 0
         while not terminated:
             s = extract_obs(obs)
-            if random.random() < params['epsilon']:
+            if random.random() < params["epsilon"]:
                 # exploitation
                 v = probs(np.array(qvalues(s)))
                 a = random.choices(actions, weights=v)[0]
@@ -51,14 +50,16 @@ def train(params: Params, env: gym.Env):
                 terminated = True
                 moves = 0
             ns = extract_obs(obs)
-            Q[(s, a)] = (1 - params['alpha']) * Q.get((s, a), 0) + \
-                params['alpha'] * (rew + params['gamma'] * max(qvalues(ns)))
+            Q[(s, a)] = (1 - params["alpha"]) * Q.get((s, a), 0) + params["alpha"] * (
+                rew + params["gamma"] * max(qvalues(ns))
+            )
 
         cum_rewards.append(cum_reward)
         rewards.append(cum_reward)
         if epoch % 1000 == 0:
             print(
-                f"Epoch: {epoch}, Average Reward: {np.average(cum_rewards)}, alpha={params['alpha']}, epsilon={params['epsilon']}")
+                f"Epoch: {epoch}, Average Reward: {np.average(cum_rewards)}, alpha={params['alpha']}, epsilon={params['epsilon']}"
+            )
             if np.average(cum_rewards) > Qmax:
                 Qmax = np.average(cum_rewards)
             cum_rewards = []

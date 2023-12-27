@@ -15,7 +15,7 @@ class GridWorldEnv(gym.Env):
         # Each location is encoded as an element of {0, ..., `size`}^2, i.e. MultiDiscrete([size, size]).
         self.observation_space = spaces.Dict(
             {
-                "agent": spaces.Box(0, size - 1, shape=(2,), dtype=int), # type: ignore
+                "agent": spaces.Box(0, size - 1, shape=(2,), dtype=int),  # type: ignore
                 "target": spaces.Box(
                     0, size - 1, shape=(2,), dtype=int  # type: ignore
                 ),
@@ -55,8 +55,7 @@ class GridWorldEnv(gym.Env):
     def reset(self, seed=None, options=None):
         super().reset(seed=seed)
 
-        self._agent_location = self.np_random.integers(
-            0, self.size, size=2, dtype=int)
+        self._agent_location = self.np_random.integers(0, self.size, size=2, dtype=int)
         self._target_location = self._agent_location
 
         while np.array_equal(self._agent_location, self._target_location):
@@ -77,8 +76,7 @@ class GridWorldEnv(gym.Env):
             self._agent_location + direction, 0, self.size - 1
         )
 
-        terminated = np.array_equal(
-            self._agent_location, self._target_location)
+        terminated = np.array_equal(self._agent_location, self._target_location)
 
         reward = 1 if terminated else 0
         observation = self._get_obs()
@@ -97,8 +95,7 @@ class GridWorldEnv(gym.Env):
         if self.window is None and self.render_mode == "human":
             pygame.init()
             pygame.display.init()
-            self.window = pygame.display.set_mode(
-                (self.window_size, self.window_size))
+            self.window = pygame.display.set_mode((self.window_size, self.window_size))
 
         if self.clock is None and self.render_mode == "human":
             self.clock = pygame.time.Clock()
