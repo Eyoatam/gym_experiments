@@ -61,7 +61,7 @@ class GridWorldEnv(gym.Env):
         while np.array_equal(self._agent_location, self._target_location):
             self._target_location = self.np_random.integers(
                 0, self.size, size=2, dtype=int
-            )
+                )
         observation = self._get_obs()
         info = self._get_info()
 
@@ -108,7 +108,7 @@ class GridWorldEnv(gym.Env):
             canvas,
             (255, 0, 0),
             pygame.Rect(
-                pix_square_size * self._target_location,
+                pix_square_size * self._target_location, # type: ignore
                 (pix_square_size, pix_square_size),
             ),
         )
@@ -116,7 +116,7 @@ class GridWorldEnv(gym.Env):
         pygame.draw.circle(
             canvas,
             (0, 0, 255),
-            (self._agent_location + 0.5) * pix_square_size,
+            (self._agent_location + 0.5) * pix_square_size, # type: ignore
             pix_square_size / 3,
         )
 
@@ -138,10 +138,10 @@ class GridWorldEnv(gym.Env):
             )
 
         if self.render_mode == "human":
-            self.window.blit(canvas, canvas.get_rect())
+            self.window.blit(canvas, canvas.get_rect()) # type: ignore
             pygame.event.pump()
             pygame.display.update()
-            self.clock.tick(self.metadata["render_fps"])
+            self.clock.tick(self.metadata["render_fps"]) # type: ignore
         else:
             return np.transpose(
                 np.array(pygame.surfarray.pixels3d(canvas)), axes=(1, 0, 2)
