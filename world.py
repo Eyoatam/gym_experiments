@@ -23,7 +23,7 @@ class GridWorldEnv(gym.Env):
             }
         )
 
-        self.action_space = spaces.Discrete(4)
+        self.action_space: gym.Space = spaces.Discrete(4)
         self._action_to_direction = {
             0: np.array([1, 0]),
             1: np.array([0, 1]),
