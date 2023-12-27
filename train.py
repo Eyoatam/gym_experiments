@@ -6,13 +6,15 @@ import gymnasium as gym
 
 Q = {}
 actions = (0, 1, 2, 3)
+Params = TypedDict(
+    'Params', {'alpha': float, 'gamma': float, 'epsilon': float})
 
 
 def qvalues(state):
     return [Q.get((state, a), 0) for a in actions]
 
 
-def discretize(state):
+def extract_obs(state):
     return tuple(state['agent'].tolist()), tuple(state['target'].tolist())
 
 
@@ -21,8 +23,6 @@ def probs(v, eps=1e-4):
     v /= v.sum()
     return v
 
-
-Params = TypedDict('Params', {'alpha': float, 'gamma': float, 'epsilon': float})
 
 def train(params: Params, env: gym.Env):
     Qmax = 0
@@ -35,7 +35,7 @@ def train(params: Params, env: gym.Env):
         terminated = False
         cum_reward = 0
         while not terminated:
-            s = discretize(obs)
+            s = extract_obs(obs)
             if random.random() < params['epsilon']:
                 # exploitation
                 v = probs(np.array(qvalues(s)))
@@ -50,7 +50,7 @@ def train(params: Params, env: gym.Env):
             if moves > 20:
                 terminated = True
                 moves = 0
-            ns = discretize(obs)
+            ns = extract_obs(obs)
             Q[(s, a)] = (1 - params['alpha']) * Q.get((s, a), 0) + \
                 params['alpha'] * (rew + params['gamma'] * max(qvalues(ns)))
 

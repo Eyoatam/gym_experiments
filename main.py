@@ -4,7 +4,7 @@ import random
 import numpy as np
 
 from world import GridWorldEnv
-from train import train, discretize, qvalues, probs
+from train import train, extract_obs, qvalues, probs
 
 
 parser = argparse.ArgumentParser(description='PyTorch actor-critic example')
@@ -36,7 +36,7 @@ def main():
         obs, _ = test_env.reset()
         terminated = False
         while not terminated:
-            s = discretize(obs)
+            s = extract_obs(obs)
             v = probs(np.array(qvalues(s)))
             a = random.choices(actions, weights=v)[0]
             obs, _, terminated, _, _ = test_env.step(a)

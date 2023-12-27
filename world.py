@@ -17,8 +17,8 @@ class GridWorldEnv(gym.Env):
             {
                 "agent": spaces.Box(0, size - 1, shape=(2,), dtype=int), # type: ignore
                 "target": spaces.Box(
-                    0, size - 1, shape=(2,), dtype=int # type: ignore
-                ),  
+                    0, size - 1, shape=(2,), dtype=int  # type: ignore
+                ),
             }
         )
 
@@ -29,7 +29,6 @@ class GridWorldEnv(gym.Env):
             2: np.array([-1, 0]),
             3: np.array([0, -1]),
         }
-
 
         assert render_mode is None or render_mode in self.metadata["render_modes"]
         self.render_mode = render_mode
@@ -80,7 +79,7 @@ class GridWorldEnv(gym.Env):
 
         terminated = np.array_equal(
             self._agent_location, self._target_location)
- 
+
         reward = 1 if terminated else 0
         observation = self._get_obs()
         info = self._get_info()
